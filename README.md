@@ -33,7 +33,7 @@ To import vulnerabilities output by either [grype](https://github.com/anchore/gr
 Once you have the vulnerability file, importing that file into AA using `aactl`:
 
 ```shell
-aactl vulnerability --project $project \
+devhub vulnerability --project $project \
                     --source $image \
                     --file report.json
 ```
@@ -58,7 +58,7 @@ You can also navigate to Artifact Registry to view the vulnerabilities there.
 In addition to vulnerabilities, `aactl` can also import [sigstore](https://github.com/sigstore) attestations:
 
 ```shell
-aactl attestation --project $project --source $image
+devhub attestation --project $project --source $image
 ```
 
 > The $image variable in the above example is the fully qualified URI of the image including its digest (e.g. `us-docker.pkg.dev/project/repo/image@sha256:397d453...`).

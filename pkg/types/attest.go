@@ -14,20 +14,15 @@
 
 package types
 
-import (
-	"net/url"
-	"strings"
-
-	"github.com/pkg/errors"
-)
-
 // AttestationOptions are the options for importing an attestation.
 type AttestationOptions struct {
 	// Project is the ID of the project to import the report into.
 	Project string
 
-	// Source is the URI of the image from which the report was generated.
-	Source string
+	// Region
+	Location string
+
+	Commit string
 
 	// Quiet suppresses output
 	Quiet bool
@@ -39,18 +34,13 @@ func (o *AttestationOptions) Validate() error {
 		return ErrMissingProject
 	}
 
-	// Validate URL and ensure that scheme is specified
-	if o.Source == "" {
+	if o.Location == "" {
 		return ErrMissingSource
 	}
 
-	u, err := url.Parse(o.Source)
-	if err != nil {
-		return errors.Wrap(ErrInvalidSource, err.Error())
+	if o.Commit == "" {
+		return ErrMissingSource
 	}
-	u.Scheme = ""
-	uri, _ := strings.CutPrefix(u.String(), "//")
-	o.Source = uri
 
 	return nil
 }

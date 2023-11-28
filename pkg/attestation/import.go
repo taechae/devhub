@@ -16,21 +16,10 @@ package attestation
 
 import (
 	"context"
-	"crypto/sha256"
 	"fmt"
 
-	ca "cloud.google.com/go/containeranalysis/apiv1"
-	"github.com/GoogleCloudPlatform/aactl/pkg/attestation/convert"
-	"github.com/GoogleCloudPlatform/aactl/pkg/container"
-	"github.com/GoogleCloudPlatform/aactl/pkg/provenance"
-	"github.com/GoogleCloudPlatform/aactl/pkg/types"
-	"github.com/GoogleCloudPlatform/aactl/pkg/utils"
 	"github.com/pkg/errors"
-	"github.com/rs/zerolog/log"
-	"google.golang.org/api/iterator"
-	g "google.golang.org/genproto/googleapis/grafeas/v1"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	"github.com/taechae/devhub/pkg/types"
 )
 
 // Import imports attestation metadata from a source.
@@ -43,143 +32,64 @@ func Import(ctx context.Context, options types.Options) error {
 		return errors.Wrap(err, "error validating options")
 	}
 
-	resourceURL, err := container.GetFullURL(opt.Source)
+	parent := fmt.Sprintf("projects/%s/locations/%s", opt.Project, opt.Location)
+	commit := opt.Commit
+
+	fmt.Printf("Searching commit (%s)...\n\n", commit)
+
+	images, err := GetImagesByTag(ctx, parent, commit)
 	if err != nil {
-		return errors.Wrap(err, "error getting full url")
-	}
-	log.Info().Msgf("Resource URL: %s", resourceURL)
-
-	nr := utils.NoteResource{
-		Project: fmt.Sprintf("projects/%s", opt.Project),
-		NoteID:  fmt.Sprintf("aactl-intoto_%x", sha256.Sum256([]byte(resourceURL))),
+		return errors.Wrap(err, "error listing images by tag")
 	}
 
-	envs, err := provenance.GetVerifiedEnvelopes(ctx, resourceURL)
+	if len(images) == 0 {
+		fmt.Println("No images found for commit.")
+		return nil
+	}
+	fmt.Println("Images found:")
+	for _, image := range images {
+		fmt.Printf("- %s\n", image)
+	}
+
+	var runtimes int
+	services, err := GetServices(ctx, parent)
 	if err != nil {
-		return errors.Wrap(err, "error unpacking message")
+		return errors.Wrap(err, "error listing services")
 	}
 
-	//_ = deleteNoteOccurrences(ctx, nr, resourceURL)
-
-	err = importEnvelopes(ctx, envs, nr, resourceURL)
-	if err != nil {
-		return errors.Wrap(err, "error importing envelopes")
-	}
-
-	return nil
-}
-
-func importEnvelopes(ctx context.Context, envs []*provenance.Envelope, nr utils.NoteResource, resourceURL string) error {
-	c, err := ca.NewClient(ctx)
-	if err != nil {
-		return errors.Wrap(err, "error creating client")
-	}
-	defer c.Close()
-
-	for _, env := range envs {
-		converter, err := convert.GetConverter(env.IntotoType, env.IntotoPredicateType)
-		if err != nil && !errors.Is(err, types.ErrorNotSupported) {
-			return errors.Wrap(err, "error getting envelope converter")
-		}
-
-		n, o, err := converter(nr, resourceURL, env)
+	for _, service := range services {
+		revisions, err := GetRevisions(ctx, service)
 		if err != nil {
-			return errors.Wrap(err, "error importing envelopes")
+			return errors.Wrap(err, "error listing revisions")
 		}
 
-		err = postNote(ctx, c, nr, n)
-		if err != nil {
-			return errors.Wrap(err, "error posting Note")
-		}
+		for _, revision := range revisions {
+			var containerImages []string
+			for _, container := range revision.Containers {
+				containerImages = append(containerImages, container.Image)
+			}
+			if matchImages(images, containerImages) {
+				if runtimes == 0 {
+					fmt.Println("\nRuntimes found:")
+					fmt.Println("- Cloud Run Revisions:")
+				}
+				runtimes++
 
-		err = postOccurrence(ctx, c, nr, o)
-		if err != nil {
-			return errors.Wrap(err, "error posting Occurrence")
+				fmt.Printf("  - Name: %s\n", revision.Name)
+
+				servingTraffic := false
+				// TODO: What if service is splitting traffic across multiple revisions?
+				// Is ready revision even guaranteed to be serving traffic?
+				if revision.Name == service.LatestReadyRevision {
+					servingTraffic = true
+				}
+				fmt.Printf("  - Serving Traffic: %t\n", servingTraffic)
+			}
 		}
 	}
 
-	return nil
-}
-
-func postNote(ctx context.Context, c *ca.Client, nr utils.NoteResource, n *g.Note) error {
-	// Create Note
-	req := &g.CreateNoteRequest{
-		Parent: nr.Project,
-		NoteId: nr.NoteID,
-		Note:   n,
-	}
-	_, err := c.GetGrafeasClient().CreateNote(ctx, req)
-	if err != nil {
-		// If note already exists, skip
-		if status.Code(err) == codes.AlreadyExists {
-			log.Info().Msgf("Already Exists: %s", nr.Name())
-		} else {
-			return errors.Wrap(err, "error posting note")
-		}
-	} else {
-		log.Info().Msgf("Created Note: %s", nr.Name())
-	}
-
-	return nil
-}
-
-func postOccurrence(ctx context.Context, c *ca.Client, nr utils.NoteResource, o *g.Occurrence) error {
-	// Create Occurrence
-	oreq := &g.CreateOccurrenceRequest{
-		Parent:     nr.Project,
-		Occurrence: o,
-	}
-	occ, err := c.GetGrafeasClient().CreateOccurrence(ctx, oreq)
-	if err != nil {
-		// If occurrence already exists, skip
-		if status.Code(err) == codes.AlreadyExists {
-			log.Info().Msgf("Already Exists: Occurrence")
-		} else {
-			return errors.Wrap(err, "error posting occurrence")
-		}
-	} else {
-		log.Info().Msgf("Created Occurrence: %s", occ.Name)
-	}
-
-	return nil
-}
-
-// deleteNoteOccurrences deletes notes and occurrences. Used for debugging.
-// nolint:unused
-func deleteNoteOccurrences(ctx context.Context, nr utils.NoteResource, resourceURL string) error {
-	c, err := ca.NewClient(ctx)
-	if err != nil {
-		return errors.Wrap(err, "error creating client")
-	}
-	defer c.Close()
-
-	// Delete Notes
-
-	dr := &g.DeleteNoteRequest{
-		Name: nr.Name(),
-	}
-	_ = c.GetGrafeasClient().DeleteNote(ctx, dr)
-
-	// Delete Occurrences
-	req := &g.ListOccurrencesRequest{
-		Parent:   nr.Project,
-		Filter:   fmt.Sprintf("resource_url=\"https://%s\"", resourceURL),
-		PageSize: 1000,
-	}
-	it := c.GetGrafeasClient().ListOccurrences(ctx, req)
-	for {
-		resp, err := it.Next()
-		if errors.Is(err, iterator.Done) {
-			break
-		}
-		if err != nil {
-			return err
-		}
-
-		dr := &g.DeleteOccurrenceRequest{
-			Name: resp.Name,
-		}
-		_ = c.GetGrafeasClient().DeleteOccurrence(ctx, dr)
+	if runtimes == 0 {
+		fmt.Println("\nNo runtimes found.")
 	}
 
 	return nil

@@ -26,9 +26,10 @@ RUN CGO_ENABLED=0 go build -a -trimpath -ldflags="\
 	-w -s -X main.commit=$COMMIT \
 	-w -s -X main.date=$DATE \
 	-extldflags '-static'" \
-    -mod vendor -o app cmd/aactl/main.go
+    -mod vendor -o app cmd/extension/main.go
 
 FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /src/app /app
-ENTRYPOINT ["/app"]
+
+CMD ["/app"]

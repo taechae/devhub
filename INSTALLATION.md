@@ -3,7 +3,7 @@
 If you have Go 1.17 or newer, you can install latest `aactl` using:
 
 ```shell
-go install github.com/GoogleCloudPlatform/aactl/cmd/aactl@latest
+go install github.com/GoogleCloudPlatform/devhub/cmd/devhub@latest
 ```
 
 ## Prerequisites 

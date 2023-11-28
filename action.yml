@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # action.yml
-name: aactl
+name: devhub
 description: 'Import vulnerabilities to Google Container Analysis'
 branding:
   icon: arrow-up
@@ -36,7 +36,7 @@ inputs:
     required: false
 runs:
   using: docker
-  image: docker://us-west1-docker.pkg.dev/cloudy-build/aactl/aactl:latest
+  image: docker://us-west1-docker.pkg.dev/cloudy-build/devhub/devhub:latest
   args:
     - ${{ inputs.type }}
     - --project=${{ inputs.project }}
