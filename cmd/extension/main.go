@@ -74,7 +74,11 @@ func runHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	b, _ := json.Marshal(out)
+	b, _ := json.Marshal(struct {
+		Data []attestation.RunRevision
+	}{
+		Data: out,
+	})
 	fmt.Fprintf(w, string(b))
 }
 
@@ -91,6 +95,10 @@ func vulHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	b, _ := json.Marshal(out)
+	b, _ := json.Marshal(struct {
+		Data []attestation.Vulnerability
+	}{
+		Data: out,
+	})
 	fmt.Fprintf(w, string(b))
 }
