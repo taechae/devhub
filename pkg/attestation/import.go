@@ -17,6 +17,7 @@ package attestation
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/pkg/errors"
 	"github.com/taechae/devhub/pkg/types"
@@ -77,9 +78,11 @@ func GetRunRevisions(ctx context.Context, options types.Options) ([]RunRevision,
 			// Is ready revision even guaranteed to be serving traffic?
 			if revision.Name == service.LatestReadyRevision {
 				//fmt.Printf("%s, %s, %s\n", service.Name, revision.Name, containerImages[0])
+				serviceTokens := strings.Split(service.Name, "/")
+				revisionTokens := strings.Split(revision.Name, "/")
 				out = append(out, RunRevision{
-					ServiceName:  service.Name,
-					RevisionName: revision.Name,
+					ServiceName:  serviceTokens[len(serviceTokens)-1],
+					RevisionName: revisionTokens[len(revisionTokens)-1],
 					ArtifactURI:  containerImages[0],
 				})
 			}

@@ -85,6 +85,61 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/CatFact"
+  /runtimes:
+    get:
+      tags:
+      - Runtimes
+      summary: Get a list of runtimes
+      description: Returns a a list of runtimes
+      operationId: getRuntimes
+      parameters:
+      - name: max_length
+        in: query
+        description: maximum length of returned fact
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Runtime"                  
+  /vulnerabilities:
+    get:
+      tags:
+      - Vulnerabilities
+      summary: Get a list of vulnerabilities
+      description: Returns a a list of vulnerabilities
+      operationId: getVulnerabilities
+      parameters:
+      - name: cve
+        in: query
+        description: filter by cve
+        required: false
+        schema:
+          type: string
+          format: string
+      - name: max_length
+        in: query
+        description: maximum length of returned fact
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Vulnerability"                     
 components:
   schemas:
     Breed:
@@ -132,4 +187,48 @@ components:
           type: integer
           format: int32
       type: object
-
+    Runtime:
+      title: Runtime model
+      description: Runtime
+      properties:
+        serviceName:
+          title: ServiceName
+          description: ServiceName
+          type: string
+          format: string
+        revisionName:
+          title: RevisionName
+          description: RevisionName
+          type: string
+          format: string
+        artifactUri:
+          title: ArtifactURI
+          description: ArtifactURI
+          type: string
+          format: string
+      type: object
+    Vulnerability:
+      title: Vulnerability model
+      description: Vulnerability
+      properties:
+        cve:
+          title: Cve
+          description: Cve
+          type: string
+          format: string
+        severity:
+          title: Severity
+          description: Severity
+          type: string
+          format: string
+        cvss:
+          title: Cvss
+          description: Cvss
+          type: number
+          format: float
+        artifactUri:
+          title: ArtifactURI
+          description: ArtifactURI
+          type: string
+          format: string
+      type: object
