@@ -61,7 +61,7 @@ build: tidy ## Builds CLI binary
 	-w -s -X main.commit=$(COMMIT) \
 	-w -s -X main.date=$(CURRENT_DATE) \
 	-extldflags '-static'" \
-    -a -mod vendor -o bin/aactl cmd/aactl/main.go
+    -a -mod vendor -o bin/devhub cmd/devhub/main.go
 
 .PHONY: image
 image: ## Builds the docker image

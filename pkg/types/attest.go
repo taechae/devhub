@@ -14,22 +14,19 @@
 
 package types
 
-// AttestationOptions are the options for importing an attestation.
-type AttestationOptions struct {
+type RunOptions struct {
 	// Project is the ID of the project to import the report into.
 	Project string
 
 	// Region
 	Location string
 
-	Commit string
-
 	// Quiet suppresses output
 	Quiet bool
 }
 
 // Validate validates the options.
-func (o *AttestationOptions) Validate() error {
+func (o *RunOptions) Validate() error {
 	if o.Project == "" {
 		return ErrMissingProject
 	}
@@ -38,8 +35,24 @@ func (o *AttestationOptions) Validate() error {
 		return ErrMissingSource
 	}
 
-	if o.Commit == "" {
-		return ErrMissingSource
+	return nil
+}
+
+type VulnOptions struct {
+	// Project is the ID of the project to import the report into.
+	Project string
+
+	// Region
+	Cve string
+
+	// Quiet suppresses output
+	Quiet bool
+}
+
+// Validate validates the options.
+func (o *VulnOptions) Validate() error {
+	if o.Project == "" {
+		return ErrMissingProject
 	}
 
 	return nil

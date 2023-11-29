@@ -31,9 +31,9 @@ var (
 		Usage:   "uri of the image from which the report was generated (e.g. us-docker.pkg.dev/project/repo/img@sha256:f6efe...)",
 	}
 
-	commitFlag = &c.StringFlag{
-		Name:    "commit",
-		Aliases: []string{"sha"},
+	cveFlag = &c.StringFlag{
+		Name:    "vulnerability",
+		Aliases: []string{"cve"},
 		Usage:   "uri of the image from which the report was generated (e.g. us-docker.pkg.dev/project/repo/img@sha256:f6efe...)",
 	}
 )

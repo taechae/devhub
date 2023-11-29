@@ -22,9 +22,76 @@ import (
 	"github.com/taechae/devhub/pkg/types"
 )
 
+func GetVulnerabilities(ctx context.Context, options types.Options) ([]Vulnerability, error) {
+	var out []Vulnerability
+
+	opt, ok := options.(*types.VulnOptions)
+	if !ok || opt == nil {
+		return out, errors.New("valid options required")
+	}
+	if err := options.Validate(); err != nil {
+		return out, errors.Wrap(err, "error validating options")
+	}
+
+	parent := fmt.Sprintf("projects/%s", opt.Project)
+
+	var filter string
+	if len(opt.Cve) > 0 {
+		filter = fmt.Sprintf("noteId=\"%s\"", opt.Cve)
+	}
+
+	return GetAAVulnerabilities(ctx, parent, filter)
+}
+
+func GetRunRevisions(ctx context.Context, options types.Options) ([]RunRevision, error) {
+	var out []RunRevision
+
+	opt, ok := options.(*types.RunOptions)
+	if !ok || opt == nil {
+		return out, errors.New("valid options required")
+	}
+	if err := options.Validate(); err != nil {
+		return out, errors.Wrap(err, "error validating options")
+	}
+
+	parent := fmt.Sprintf("projects/%s/locations/%s", opt.Project, opt.Location)
+
+	services, err := GetServices(ctx, parent)
+	if err != nil {
+		return out, errors.Wrap(err, "error listing services")
+	}
+
+	for _, service := range services {
+		revisions, err := GetRevisions(ctx, service)
+		if err != nil {
+			return out, errors.Wrap(err, "error listing revisions")
+		}
+
+		for _, revision := range revisions {
+			var containerImages []string
+			for _, container := range revision.Containers {
+				containerImages = append(containerImages, container.Image)
+			}
+
+			// TODO: What if service is splitting traffic across multiple revisions?
+			// Is ready revision even guaranteed to be serving traffic?
+			if revision.Name == service.LatestReadyRevision {
+				//fmt.Printf("%s, %s, %s\n", service.Name, revision.Name, containerImages[0])
+				out = append(out, RunRevision{
+					ServiceName:  service.Name,
+					RevisionName: revision.Name,
+					ArtifactURI:  containerImages[0],
+				})
+			}
+		}
+	}
+
+	return out, nil
+}
+
 // Import imports attestation metadata from a source.
 func Import(ctx context.Context, options types.Options) error {
-	opt, ok := options.(*types.AttestationOptions)
+	opt, ok := options.(*types.RunOptions)
 	if !ok || opt == nil {
 		return errors.New("valid options required")
 	}
@@ -33,7 +100,7 @@ func Import(ctx context.Context, options types.Options) error {
 	}
 
 	parent := fmt.Sprintf("projects/%s/locations/%s", opt.Project, opt.Location)
-	commit := opt.Commit
+	commit := "zzz"
 
 	fmt.Printf("Searching commit (%s)...\n\n", commit)
 

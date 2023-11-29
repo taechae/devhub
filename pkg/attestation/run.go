@@ -9,6 +9,12 @@ import (
 	"google.golang.org/api/iterator"
 )
 
+type RunRevision struct {
+	ServiceName  string
+	RevisionName string
+	ArtifactURI  string
+}
+
 func GetServices(ctx context.Context, parent string) ([]*crpb.Service, error) {
 	var out []*crpb.Service
 
