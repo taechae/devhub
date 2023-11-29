@@ -79,9 +79,11 @@ func runHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func vulHandler(w http.ResponseWriter, r *http.Request) {
+	cve := r.URL.Query().Get("cve")
+
 	opt := &types.VulnOptions{
 		Project: "s3c100",
-		Cve:     "CVE-2023-29405",
+		Cve:     cve,
 	}
 
 	out, err := attestation.GetVulnerabilities(r.Context(), opt)
