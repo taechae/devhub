@@ -1,0 +1,80 @@
+{
+	"displayName":"cat-facts-taechae",
+	"description":"an awesome extension to solve everything",
+	"manifest":{
+	   "name":"cat-facts",
+	   "description":"A Cat Facts tool to find breed and random facts of cats",
+	   "apiSpec":{
+		  "openApiGcsUri":"gs://model-extend-test-bucket/cat-facts-taechae.yaml"
+	   },
+	   "authConfig":{
+		  "authType":"NO_AUTH"
+	   },
+	   "extension_selection_examples":[
+		  {
+			 "query":"i want to learn some random facts of cats",
+			 "multi_steps":[
+				{
+				   "thought":"I should call cat-facts for this",
+				   "extension_execution":{
+					  "operation_id":"getRandomFact",
+					  "extension_instruction":"get a random fact of cats with default max_length of 100",
+					  "observation":"{ \"fact\": \"One reason that kittens sleep so much is because a growth hormone is released only during sleep.\", \"length\": 96}"
+				   }
+				},
+				{
+				   "thought":"Since the observation was successful, I should respond back to the user with results",
+				   "respond_to_user":{
+					  
+				   }
+				}
+			 ]
+		  },
+		  {
+			 "query":"get running runtimes",
+			 "multi_steps":[
+				{
+				   "thought":"I should call cat-facts for this",
+				   "extension_execution":{
+					  "operation_id":"getRuntimes",
+					  "extension_instruction":"get currently running runtimes",
+					  "observation":"{\"Data\":[{\"ServiceName\":\"devhub\",\"RevisionName\":\"devhub-00011-67z\",\"ArtifactURI\":\"us-central1-docker.pkg.dev/s3c100/extension/extension@sha256:b0e8aa0123da96872170bc4834344df950adab53a578b19b330332273cf6cd1f\"},{\"ServiceName\":\"s3caa\",\"RevisionName\":\"s3caa-00002-lkm\",\"ArtifactURI\":\"us-central1-docker.pkg.dev/s3c100/extension/extension@sha256:c90236fd9e3aa168739645a9dd233f1542b50ee989304fe114996b79537d0da2\"}]}"
+				   }
+				},
+				{
+				   "thought":"Since the observation was successful, I should respond back to the user with results",
+				   "respond_to_user":{
+					  
+				   }
+				}
+			 ]
+		  }
+	   ],
+	   "extension_invocation_examples":[
+		  {
+			 "extension_instruction":"get a random fact of cats",
+			 "operation_id":"getRandomFact",
+			 "thought":"The user didn’t specify max_length. Using default length 100. Issue a getRandomFact operation request on Cat Facts tool",
+			 "operation_param":"{\"max_length\": 100}",
+			 "parameters_mentioned":[
+				"max_length"
+			 ]
+		  },
+		  {
+			 "extension_instruction":"get running runtimes",
+			 "operation_id":"getRuntimes",
+			 "thought":"Issue a getRuntimes operation request on Cat Facts tool"
+		  }
+	   ],
+	   "extension_response_examples":[
+		  {
+			 "operation_id":"getRandomFact",
+			 "response_template":"{% if response.fact %} Hello, this is the fact: {{ response.fact }}! {% else %} Sorry, no facts found. {% endif %}"
+		  },
+		  {
+			 "operation_id":"getRuntimes",
+			 "response_template":"{% if response.Data %} Hello, this is the fact: {{ response.Data }}! {% else %} Sorry, no facts found. {% endif %}"
+		  }
+	   ]
+	}
+ }

@@ -26,8 +26,8 @@ func main() {
 	http.HandleFunc("/fact", factHandler)
 	http.HandleFunc("/facts", factsHandler)
 
-	http.HandleFunc("/run", runHandler)
-	http.HandleFunc("/vul", vulHandler)
+	http.HandleFunc("/runtimes", runHandler)
+	http.HandleFunc("/vulnerabilities", vulHandler)
 
 	// Determine port for HTTP service.
 	port := os.Getenv("PORT")
