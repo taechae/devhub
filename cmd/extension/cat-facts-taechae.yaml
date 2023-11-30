@@ -93,13 +93,13 @@ paths:
       description: Returns a a list of runtimes
       operationId: getRuntimes
       parameters:
-      - name: max_length
+      - name: artufacts
         in: query
-        description: maximum length of returned fact
+        description: match artifacts
         required: false
         schema:
-          type: integer
-          format: int64
+          type: string
+          format: string
       responses:
         '200':
           description: successful operation
@@ -139,7 +139,32 @@ paths:
               schema:
                 type: array
                 items:
-                  "$ref": "#/components/schemas/Vulnerability"                     
+                  "$ref": "#/components/schemas/Vulnerability"
+  /vulnerable-artifacts:
+    get:
+      tags:
+      - VulnerableArtifacts
+      summary: Get a list of vulnerable artifacts
+      description: Returns a a list of vulnerable artifacts
+      operationId: getVulnerableArtifacts
+      parameters:
+      - name: vulnerability
+        in: query
+        description: filter by vulnerability
+        required: false
+        schema:
+          type: string
+          format: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: string                  
 components:
   schemas:
     Breed:
@@ -206,6 +231,10 @@ components:
           description: ArtifactURI
           type: string
           format: string
+        match:
+          title: Match
+          description: Match
+          type: boolean
       type: object
     Vulnerability:
       title: Vulnerability model

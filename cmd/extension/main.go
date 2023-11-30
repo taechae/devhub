@@ -87,9 +87,9 @@ func runHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	for _, r := range out {
+	for i, r := range out {
 		if findArtifact(artifacts, r.ArtifactURI) {
-			r.Match = true
+			out[i].Match = true
 		}
 	}
 

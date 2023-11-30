@@ -83,7 +83,7 @@ func GetRunRevisions(ctx context.Context, options types.Options) ([]RunRevision,
 				out = append(out, RunRevision{
 					ServiceName:  serviceTokens[len(serviceTokens)-1],
 					RevisionName: revisionTokens[len(revisionTokens)-1],
-					ArtifactURI:  containerImages[0],
+					ArtifactURI:  "https://" + containerImages[0],
 				})
 			}
 		}
