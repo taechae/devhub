@@ -28,6 +28,7 @@ func main() {
 
 	http.HandleFunc("/runtimes", runHandler)
 	http.HandleFunc("/vulnerabilities", vulHandler)
+	http.HandleFunc("/vulnerable-artifacts", vulArtifactsHandler)
 
 	// Determine port for HTTP service.
 	port := os.Getenv("PORT")
@@ -100,5 +101,27 @@ func vulHandler(w http.ResponseWriter, r *http.Request) {
 	}{
 		Data: out,
 	})
+	fmt.Fprintf(w, string(b))
+}
+
+func vulArtifactsHandler(w http.ResponseWriter, r *http.Request) {
+	cve := r.URL.Query().Get("vulnerability")
+
+	opt := &types.VulnOptions{
+		Project: "s3c100",
+		Cve:     cve,
+	}
+
+	out, err := attestation.GetVulnerabilities(r.Context(), opt)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var artifacts []string
+	for _, r := range out {
+		artifacts = append(artifacts, r.ArtifactURI)
+	}
+
+	b, _ := json.Marshal(artifacts)
 	fmt.Fprintf(w, string(b))
 }
