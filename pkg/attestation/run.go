@@ -13,6 +13,7 @@ type RunRevision struct {
 	ServiceName  string
 	RevisionName string
 	ArtifactURI  string
+	Match        bool
 }
 
 func GetServices(ctx context.Context, parent string) ([]*crpb.Service, error) {

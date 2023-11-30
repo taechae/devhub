@@ -87,19 +87,16 @@ func runHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	var matches []string
 	for _, r := range out {
 		if findArtifact(artifacts, r.ArtifactURI) {
-			matches = append(matches, r.ServiceName)
+			r.Match = true
 		}
 	}
 
 	b, _ := json.Marshal(struct {
-		MatchedServices []string
-		Data            []attestation.RunRevision
+		Data []attestation.RunRevision
 	}{
-		MatchedServices: matches,
-		Data:            out,
+		Data: out,
 	})
 	fmt.Fprintf(w, string(b))
 }
