@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/taechae/devhub/pkg/attestation"
 	"github.com/taechae/devhub/pkg/types"
@@ -64,21 +65,41 @@ func factsHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, facts)
 }
 
+func findArtifact(artifacts []string, needle string) bool {
+	for _, a := range artifacts {
+		if a == needle {
+			return true
+		}
+	}
+	return false
+}
+
 func runHandler(w http.ResponseWriter, r *http.Request) {
 	opt := &types.RunOptions{
 		Project:  "s3c100",
 		Location: "us-central1",
 	}
 
+	artifacts := strings.Split(r.URL.Query().Get("artifacts"), ",")
+
 	out, err := attestation.GetRunRevisions(r.Context(), opt)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	var matches []string
+	for _, r := range out {
+		if findArtifact(artifacts, r.ArtifactURI) {
+			matches = append(matches, r.ServiceName)
+		}
+	}
+
 	b, _ := json.Marshal(struct {
-		Data []attestation.RunRevision
+		MatchedServices []string
+		Data            []attestation.RunRevision
 	}{
-		Data: out,
+		MatchedServices: matches,
+		Data:            out,
 	})
 	fmt.Fprintf(w, string(b))
 }
