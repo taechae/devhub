@@ -48,7 +48,26 @@
 				   }
 				}
 			 ]
-		  }
+		  },
+		  {
+			"query":"get artifacts that contain vulnerability CVE-2023-39323",
+			"multi_steps":[
+			   {
+				  "thought":"I should call cat-facts for this",
+				  "extension_execution":{
+					 "operation_id":"getVulnerabilities",
+					 "extension_instruction":"get a list of artifacts that contain a specified vulnerability",
+					 "observation":"{\"Data\":[{\"Cve\":\"CVE-2023-39323\",\"Severity\":\"CRITICAL\",\"Cvss\":9.8,\"ArtifactURI\":\"https://us-central1-docker.pkg.dev/s3c100/extension/extension@sha256:b0e8aa0123da96872170bc4834344df950adab53a578b19b330332273cf6cd1f\"},{\"Cve\":\"CVE-2023-39323\",\"Severity\":\"CRITICAL\",\"Cvss\":9.8,\"ArtifactURI\":\"https://us-central1-docker.pkg.dev/s3c100/extension/extension@sha256:17dcb8a38046d09b430f449569cab95e84cad24bb227e32d44a73d0203354f5c\"}]}"
+				  }
+			   },
+			   {
+				  "thought":"Since the observation was successful, I should respond back to the user with results",
+				  "respond_to_user":{
+					 
+				  }
+			   }
+			]
+		 }
 	   ],
 	   "extension_invocation_examples":[
 		  {
@@ -64,7 +83,16 @@
 			 "extension_instruction":"get running runtimes",
 			 "operation_id":"getRuntimes",
 			 "thought":"Issue a getRuntimes operation request on Cat Facts tool"
-		  }
+		  },
+		  {
+			"extension_instruction":"get artifacts that contain a specified vulnerabiliy",
+			"operation_id":"getVulnerabilities",
+			"thought":"The user specified vulnerability. Issue a getVulnerabilities operation request on Cat Facts tool",
+			"operation_param":"{\"vulnerability\": \"CVE-2023-39323\"}",
+			"parameters_mentioned":[
+			   "vulnerability"
+			]
+		 }
 	   ],
 	   "extension_response_examples":[
 		  {
@@ -74,7 +102,11 @@
 		  {
 			 "operation_id":"getRuntimes",
 			 "response_template":"{% if response.Data %} Hello, this is the fact: {{ response.Data }}! {% else %} Sorry, no facts found. {% endif %}"
-		  }
+		  },
+		  {
+			"operation_id":"getVulnerabilities",
+			"response_template":"{% if response.Data %} Hello, this is the fact: {{ response.Data }}! {% else %} Sorry, no facts found. {% endif %}"
+		 }
 	   ]
 	}
  }
