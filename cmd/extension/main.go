@@ -149,12 +149,12 @@ func vulArtifactsHandler(w http.ResponseWriter, r *http.Request) {
 
 func colorHandler(w http.ResponseWriter, r *http.Request) {
 	word := r.URL.Query().Get("word")
-	word = word + "Red"
+	word = "Red" + word
 	fmt.Fprintf(w, word)
 }
 
 func doubleHandler(w http.ResponseWriter, r *http.Request) {
 	word := r.URL.Query().Get("word")
-	word = word + word
+	word = "Big" + word
 	fmt.Fprintf(w, word)
 }

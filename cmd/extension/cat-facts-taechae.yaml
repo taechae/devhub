@@ -166,7 +166,57 @@ paths:
                 type: array
                 items:
                   type: string
-                  format: string                  
+                  format: string
+  /color:
+    get:
+      tags:
+      - Color
+      summary: Color word
+      description: Returns the word in red
+      operationId: color
+      parameters:
+      - name: word
+        in: query
+        description: word to modify
+        required: true
+        schema:
+          type: string
+          format: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                title: Word
+                description: Word
+                type: string
+                format: string
+  /double:
+    get:
+      tags:
+      - Double
+      summary: Double word
+      description: Returns the word in duplicate
+      operationId: double
+      parameters:
+      - name: word
+        in: query
+        description: word to modify
+        required: true
+        schema:
+          type: string
+          format: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                title: Word
+                description: Word
+                type: string
+                format: string           
 components:
   schemas:
     Breed:

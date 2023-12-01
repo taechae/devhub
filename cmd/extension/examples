@@ -75,6 +75,33 @@
 				  }
 			   }
 			]
+		 },
+		 {
+			"query":"style the following word Ball",
+			"multi_steps":[
+			   {
+				  "thought":"I should call cat-facts to color the word Ball",
+				  "extension_execution":{
+					 "operation_id":"color",
+					 "extension_instruction":"color the word Ball",
+					 "observation":"returned word is BallRed"
+				  }
+			   },
+			   {
+				"thought":"I should call cat-facts to double the word BallRed",
+				"extension_execution":{
+				   "operation_id":"double",
+				   "extension_instruction":"double the word BallRed",
+				   "observation":"returned word is BallRedBallRed"
+				}
+			   },
+			   {
+				  "thought":"Since the observation was successful, I should the result BallRedBallRed.",
+				  "respond_to_user":{
+					 
+				  }
+			   }
+			]
 		 }
 	   ],
 	   "extension_invocation_examples":[
@@ -109,7 +136,25 @@
 			"parameters_mentioned":[
 			   "vulnerability"
 			]
-		 }
+		 },
+		 {
+			"extension_instruction":"color the word Ball",
+			"operation_id":"color",
+			"thought":"Issue a color operation request on Cat Facts tool",
+			"operation_param":"{\"word\": \"Ball\"",
+			"parameters_mentioned":[
+			   "word"
+			]
+		  },
+		  {
+			"extension_instruction":"double the word BallRed",
+			"operation_id":"double",
+			"thought":"Issue a double operation request on Cat Facts tool",
+			"operation_param":"{\"word\": \"BallRed\"",
+			"parameters_mentioned":[
+			   "word"
+			]
+		  }
 	   ],
 	   "extension_response_examples":[
 		  {
@@ -123,7 +168,15 @@
 		  {
 			"operation_id":"getVulnerableArtifacts",
 			"response_template":"{% if response %} Hello, this is the fact: {{ response }}! {% else %} Sorry, no facts found. {% endif %}"
-		 }
+		  },
+		  {
+			"operation_id":"color",
+			"response_template":"{{ response }}"
+		  },
+		  {
+			"operation_id":"double",
+			"response_template":"{{ response }}"
+		  }
 	   ]
 	}
  }
