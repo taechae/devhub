@@ -188,8 +188,6 @@ paths:
           content:
             application/json:
               schema:
-                title: Word
-                description: Word
                 type: string
                 format: string
   /double:
@@ -213,8 +211,6 @@ paths:
           content:
             application/json:
               schema:
-                title: Word
-                description: Word
                 type: string
                 format: string           
 components:
