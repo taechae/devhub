@@ -84,19 +84,19 @@
 				  "extension_execution":{
 					 "operation_id":"color",
 					 "extension_instruction":"color the word Ball",
-					 "observation":"returned word is BallRed"
+					 "observation":"returned word is RedBall"
 				  }
 			   },
 			   {
-				"thought":"I should call cat-facts to double the word BallRed",
+				"thought":"I should call cat-facts to double the word RedBall",
 				"extension_execution":{
 				   "operation_id":"double",
-				   "extension_instruction":"double the word BallRed",
-				   "observation":"returned word is BallRedBallRed"
+				   "extension_instruction":"double the word RedBall",
+				   "observation":"returned word is BigRedBall"
 				}
 			   },
 			   {
-				  "thought":"Since the observation was successful, I should the result BallRedBallRed.",
+				  "thought":"Since the observation was successful, I should the return result BigRedBall.",
 				  "respond_to_user":{
 					 
 				  }
@@ -141,16 +141,16 @@
 			"extension_instruction":"color the word Ball",
 			"operation_id":"color",
 			"thought":"Issue a color operation request on Cat Facts tool",
-			"operation_param":"{\"word\": \"Ball\"",
+			"operation_param":"{\"word\": \"Ball\"}",
 			"parameters_mentioned":[
 			   "word"
 			]
 		  },
 		  {
-			"extension_instruction":"double the word BallRed",
+			"extension_instruction":"double the word Ball",
 			"operation_id":"double",
 			"thought":"Issue a double operation request on Cat Facts tool",
-			"operation_param":"{\"word\": \"BallRed\"",
+			"operation_param":"{\"word\": \"Ball\"}",
 			"parameters_mentioned":[
 			   "word"
 			]
