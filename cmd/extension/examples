@@ -38,7 +38,7 @@
 				   "extension_execution":{
 					  "operation_id":"getRuntimes",
 					  "extension_instruction":"get currently running runtimes",
-					  "observation":"{\"Data\":[{\"ServiceName\":\"devhub\",\"RevisionName\":\"devhub-00011-67z\",\"ArtifactURI\":\"us-central1-docker.pkg.dev/s3c100/extension/extension@sha256:b0e8aa0123da96872170bc4834344df950adab53a578b19b330332273cf6cd1f\"},{\"ServiceName\":\"s3caa\",\"RevisionName\":\"s3caa-00002-lkm\",\"ArtifactURI\":\"us-central1-docker.pkg.dev/s3c100/extension/extension@sha256:c90236fd9e3aa168739645a9dd233f1542b50ee989304fe114996b79537d0da2\"}]}"
+					  "observation":"{\"Data\":[{\"ServiceName\":\"devhub\",\"RevisionName\":\"devhub-00017-jrd\",\"ArtifactURI\":\"https://us-central1-docker.pkg.dev/s3c100/extension/extension@sha256:e3536a8fc4f886e7254d3b10e736c677f2ef22965fcb05dbb287099940ecba73\",\"Match\":true},{\"ServiceName\":\"s3caa\",\"RevisionName\":\"s3caa-00002-lkm\",\"ArtifactURI\":\"https://us-central1-docker.pkg.dev/s3c100/extension/extension@sha256:c90236fd9e3aa168739645a9dd233f1542b50ee989304fe114996b79537d0da2\",\"Match\":false}]}"
 				   }
 				},
 				{
@@ -50,18 +50,26 @@
 			 ]
 		  },
 		  {
-			"query":"get artifacts that contain vulnerability CVE-2023-39323",
+			"query":"get running runtimes that contain vulnerability CVE-2023-39323",
 			"multi_steps":[
 			   {
-				  "thought":"I should call cat-facts for this",
+				  "thought":"I should call cat-facts to get artifacts that contain vulnerability CVE-2023-39323",
 				  "extension_execution":{
-					 "operation_id":"getVulnerabilities",
+					 "operation_id":"getVulnerableArtifacts",
 					 "extension_instruction":"get a list of artifacts that contain CVE-2023-39323",
-					 "observation":"{\"Data\":[{\"Cve\":\"CVE-2023-39323\",\"Severity\":\"CRITICAL\",\"Cvss\":9.8,\"ArtifactURI\":\"https://us-central1-docker.pkg.dev/s3c100/extension/extension@sha256:b0e8aa0123da96872170bc4834344df950adab53a578b19b330332273cf6cd1f\"},{\"Cve\":\"CVE-2023-39323\",\"Severity\":\"CRITICAL\",\"Cvss\":9.8,\"ArtifactURI\":\"https://us-central1-docker.pkg.dev/s3c100/extension/extension@sha256:17dcb8a38046d09b430f449569cab95e84cad24bb227e32d44a73d0203354f5c\"}]}"
+					 "observation":"List of artifacts are [\"Artifact1\",\"Artifact2\"]"
 				  }
 			   },
 			   {
-				  "thought":"Since the observation was successful, I should respond back to the user with results",
+				"thought":"I should call cat-facts to get runtimes that contain list of artifacts [\"Artifact1\",\"Artifact2\"]",
+				"extension_execution":{
+				   "operation_id":"getRuntimes",
+				   "extension_instruction":"get a currently running runtimes with list of artifacts [\"Artifact1\",\"Artifact2\"]",
+				   "observation":"{\"Data\":[{\"ServiceName\":\"devhub\",\"RevisionName\":\"devhub-00017-jrd\",\"ArtifactURI\":\"Artifact1\",\"Match\":true},{\"ServiceName\":\"s3caa\",\"RevisionName\":\"s3caa-00002-lkm\",\"ArtifactURI\":\"Artifact2\",\"Match\":false}]}"
+				}
+			   },
+			   {
+				  "thought":"Since the observation was successful, I should concatenate the results from the previous steps and return he results.",
 				  "respond_to_user":{
 					 
 				  }
@@ -85,9 +93,18 @@
 			 "thought":"Issue a getRuntimes operation request on Cat Facts tool"
 		  },
 		  {
-			"extension_instruction":"get a list of artifacts that contain CVE-2023-39323",
-			"operation_id":"getVulnerabilities",
-			"thought":"Issue a getVulnerabilities operation request on Cat Facts tool with vulnerability CVE-2023-39323",
+			"extension_instruction":"get running runtimes that contain list of artifacts [\"Artifact1\",\"Artifact2\"]",
+			"operation_id":"getRuntimes",
+			"thought":"Issue a getRuntimes operation request on Cat Facts tool",
+			"operation_param":"{\"artifacts\": [\"Artifact1\",\"Artifact2\"]}",
+			"parameters_mentioned":[
+			   "artifacts"
+			]
+		  },
+		  {
+			"extension_instruction":"get a list of artifacts that contain vulnerability CVE-2023-39323",
+			"operation_id":"getVulnerableArtifacts",
+			"thought":"Issue a getVulnerableArtifacts operation request on Cat Facts tool with vulnerability CVE-2023-39323",
 			"operation_param":"{\"vulnerability\": \"CVE-2023-39323\"}",
 			"parameters_mentioned":[
 			   "vulnerability"
@@ -104,8 +121,8 @@
 			 "response_template":"{% if response.Data %} Hello, this is the fact: {{ response.Data }}! {% else %} Sorry, no facts found. {% endif %}"
 		  },
 		  {
-			"operation_id":"getVulnerabilities",
-			"response_template":"{% if response.Data %} Hello, this is the fact: {{ response.Data }}! {% else %} Sorry, no facts found. {% endif %}"
+			"operation_id":"getVulnerableArtifacts",
+			"response_template":"{% if response %} Hello, this is the fact: {{ response }}! {% else %} Sorry, no facts found. {% endif %}"
 		 }
 	   ]
 	}

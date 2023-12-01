@@ -31,6 +31,9 @@ func main() {
 	http.HandleFunc("/vulnerabilities", vulHandler)
 	http.HandleFunc("/vulnerable-artifacts", vulArtifactsHandler)
 
+	http.HandleFunc("/color", colorHandler)
+	http.HandleFunc("/double", doubleHandler)
+
 	// Determine port for HTTP service.
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -142,4 +145,16 @@ func vulArtifactsHandler(w http.ResponseWriter, r *http.Request) {
 
 	b, _ := json.Marshal(artifacts)
 	fmt.Fprintf(w, string(b))
+}
+
+func colorHandler(w http.ResponseWriter, r *http.Request) {
+	word := r.URL.Query().Get("word")
+	word = word + "Red"
+	fmt.Fprintf(w, word)
+}
+
+func doubleHandler(w http.ResponseWriter, r *http.Request) {
+	word := r.URL.Query().Get("word")
+	word = word + word
+	fmt.Fprintf(w, word)
 }

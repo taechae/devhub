@@ -161,6 +161,8 @@ paths:
           content:
             application/json:
               schema:
+                title: Artifacts
+                description: Artifacts
                 type: array
                 items:
                   type: string
