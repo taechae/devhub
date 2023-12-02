@@ -77,26 +77,26 @@
 			]
 		 },
 		 {
-			"query":"style the following word Ball",
+			"query":"what color is the word Ball",
 			"multi_steps":[
 			   {
-				  "thought":"I should call cat-facts to color the word Ball",
+				  "thought":"I should call cat-facts to get the shape of the word Ball",
 				  "extension_execution":{
-					 "operation_id":"color",
-					 "extension_instruction":"color the word Ball",
-					 "observation":"colored word is RedBall"
+					 "operation_id":"double",
+					 "extension_instruction":"what shape is the word Ball?",
+					 "observation":"Ball is a sphere shape"
 				  }
 			   },
 			   {
-				"thought":"I should call cat-facts to double the colored word RedBall",
+				"thought":"I should call cat-facts to find out what color a sphere shape is",
 				"extension_execution":{
-				   "operation_id":"double",
-				   "extension_instruction":"double the word RedBall",
-				   "observation":"doubled word is BigRedBall"
+				   "operation_id":"color",
+				   "extension_instruction":"what color is a sphere shape?",
+				   "observation":"sphere is the color red"
 				}
 			   },
 			   {
-				  "thought":"Since the observation was successful, I should the return result BigRedBall.",
+				  "thought":"Since the observation was successful, I should the return result color red.",
 				  "respond_to_user":{
 					 
 				  }
@@ -138,18 +138,18 @@
 			]
 		 },
 		 {
-			"extension_instruction":"color the word Ball",
+			"extension_instruction":"what color is a shere shape?",
 			"operation_id":"color",
-			"thought":"Issue a color operation request on Cat Facts tool",
-			"operation_param":"{\"word\": \"Ball\"}",
+			"thought":"I should call cat-facts to find out what color a sphere shape is",
+			"operation_param":"{\"word\": \"sphere\"}",
 			"parameters_mentioned":[
 			   "word"
 			]
 		  },
 		  {
-			"extension_instruction":"double the word Ball",
+			"extension_instruction":"what shape is the word Ball?",
 			"operation_id":"double",
-			"thought":"Issue a double operation request on Cat Facts tool",
+			"thought":"I should call cat-facts to find out what shape the word Ball is",
 			"operation_param":"{\"word\": \"Ball\"}",
 			"parameters_mentioned":[
 			   "word"

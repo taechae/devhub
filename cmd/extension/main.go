@@ -149,7 +149,7 @@ func vulArtifactsHandler(w http.ResponseWriter, r *http.Request) {
 
 func colorHandler(w http.ResponseWriter, r *http.Request) {
 	word := r.URL.Query().Get("word")
-	word = "Red" + word
+	word = "Red"
 	b, _ := json.Marshal(struct {
 		StyledWord string `json:"styled_word"`
 	}{
@@ -160,7 +160,7 @@ func colorHandler(w http.ResponseWriter, r *http.Request) {
 
 func doubleHandler(w http.ResponseWriter, r *http.Request) {
 	word := r.URL.Query().Get("word")
-	word = "Big" + word
+	word = "sphere"
 	b, _ := json.Marshal(struct {
 		StyledWord string `json:"styled_word"`
 	}{
