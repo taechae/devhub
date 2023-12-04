@@ -161,12 +161,23 @@ func vulArtifactsHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	b, _ := json.Marshal(struct {
-		Data []attestation.Vulnerability
-	}{
-		Data: []attestation.Vulnerability{out[0]},
-	})
+	var yes bool
+	if len(out) > 0 {
+		yes = true
+	}
+
+	b, _ := json.Marshal(yes)
 	fmt.Fprintf(w, string(b))
+
+	/*
+
+		b, _ := json.Marshal(struct {
+			Data []attestation.Vulnerability
+		}{
+			Data: out,
+		})
+		fmt.Fprintf(w, string(b))
+	*/
 }
 
 func colorHandler(w http.ResponseWriter, r *http.Request) {
