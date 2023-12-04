@@ -164,7 +164,7 @@ func vulArtifactsHandler(w http.ResponseWriter, r *http.Request) {
 	b, _ := json.Marshal(struct {
 		Data []attestation.Vulnerability
 	}{
-		Data: out,
+		Data: []attestation.Vulnerability{out[0]},
 	})
 	fmt.Fprintf(w, string(b))
 }

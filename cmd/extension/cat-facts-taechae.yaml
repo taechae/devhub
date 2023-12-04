@@ -112,18 +112,10 @@ paths:
   /runtime-artifacts:
     get:
       tags:
-      - Runtimes
+      - RuntimeArtifacts
       summary: Get a list of runtimes
       description: Returns a a list of runtimes
-      operationId: getRuntimes
-      parameters:
-      - name: artufacts
-        in: query
-        description: match artifacts
-        required: false
-        schema:
-          type: string
-          format: string
+      operationId: getRuntimeArtifacts
       responses:
         '200':
           description: successful operation
