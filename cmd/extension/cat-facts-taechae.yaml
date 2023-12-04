@@ -203,8 +203,7 @@ paths:
           content:
             application/json:
               schema:
-                type: string
-                format: string
+                type: boolean
   /double:
     get:
       tags:
@@ -226,8 +225,10 @@ paths:
           content:
             application/json:
               schema:
-                type: string
-                format: string           
+                type: array
+                items:
+                  type: string
+                  format: string           
 components:
   schemas:
     Breed:

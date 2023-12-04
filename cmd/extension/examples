@@ -85,18 +85,18 @@
 			]
 		 },
 		 {
-			"query":"do my shapes contain color red",
+			"query":"does my basket contain color red?",
 			"multi_steps":[
 			   {
 				  "thought":"I should call cat-facts to get the shapes of my basket",
 				  "extension_execution":{
 					 "operation_id":"double",
-					 "extension_instruction":"get the shapes of my basket",
+					 "extension_instruction":"get the shapes in my basket",
 					 "observation":"The shapes are sphere, cube"
 				  }
 			   },
 			   {
-				"thought":"I should call cat-facts to find out what color a sphere shape is",
+				"thought":"I should call cat-facts to find out if shape sphere is color red",
 				"extension_execution":{
 				   "operation_id":"color",
 				   "extension_instruction":"Is a sphere shape a red color?",
@@ -104,7 +104,7 @@
 				}
 			   },
 			   {
-				"thought":"I should call cat-facts to find out what color a cube shape is",
+				"thought":"I should call cat-facts to find out if shape cube is color red",
 				"extension_execution":{
 				   "operation_id":"color",
 				   "extension_instruction":"Is a cube shape a red color?",
@@ -151,14 +151,14 @@
 			]
 		 },
 		 {
-			"extension_instruction":"get the shapes of my basket",
+			"extension_instruction":"get the shapes of in basket",
 			"operation_id":"double",
 			"thought":"I should call cat-facts to find out shapes are in my basket"
 		  },
 		  {
-			"extension_instruction":"Is a cube shape a red color?",
+			"extension_instruction":"Is shape cube shape a red color?",
 			"operation_id":"color",
-			"thought":"I should call cat-facts to find out what color the cube shape is",
+			"thought":"I should call cat-facts to find out if shape cube is color red",
 			"operation_param":"{\"word\": \"cube\"}",
 			"parameters_mentioned":[
 			   "word"
