@@ -28,6 +28,7 @@ func main() {
 	http.HandleFunc("/facts", factsHandler)
 
 	http.HandleFunc("/runtimes", runHandler)
+	http.HandleFunc("/runtime-artifacts", runArtifactsHandler)
 	http.HandleFunc("/vulnerabilities", vulHandler)
 	http.HandleFunc("/vulnerable-artifacts", vulArtifactsHandler)
 
@@ -125,15 +126,13 @@ func vulHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, string(b))
 }
 
-func vulArtifactsHandler(w http.ResponseWriter, r *http.Request) {
-	cve := r.URL.Query().Get("vulnerability")
-
-	opt := &types.VulnOptions{
-		Project: "s3c100",
-		Cve:     cve,
+func runArtifactsHandler(w http.ResponseWriter, r *http.Request) {
+	opt := &types.RunOptions{
+		Project:  "s3c100",
+		Location: "us-central1",
 	}
 
-	out, err := attestation.GetVulnerabilities(r.Context(), opt)
+	out, err := attestation.GetRunRevisions(r.Context(), opt)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -144,6 +143,29 @@ func vulArtifactsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	b, _ := json.Marshal(artifacts)
+	fmt.Fprintf(w, string(b))
+}
+
+func vulArtifactsHandler(w http.ResponseWriter, r *http.Request) {
+	cve := r.URL.Query().Get("vulnerability")
+	artifact := r.URL.Query().Get("artifact")
+
+	opt := &types.VulnOptions{
+		Project:     "s3c100",
+		Cve:         cve,
+		ArtifactURI: artifact,
+	}
+
+	out, err := attestation.GetVulnerabilities(r.Context(), opt)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	b, _ := json.Marshal(struct {
+		Data []attestation.Vulnerability
+	}{
+		Data: out,
+	})
 	fmt.Fprintf(w, string(b))
 }
 

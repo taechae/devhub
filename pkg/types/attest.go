@@ -45,6 +45,8 @@ type VulnOptions struct {
 	// Region
 	Cve string
 
+	ArtifactURI string
+
 	// Quiet suppresses output
 	Quiet bool
 }

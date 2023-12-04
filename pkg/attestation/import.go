@@ -41,6 +41,13 @@ func GetVulnerabilities(ctx context.Context, options types.Options) ([]Vulnerabi
 		filter = fmt.Sprintf("noteId=\"%s\"", opt.Cve)
 	}
 
+	if len(opt.ArtifactURI) > 0 {
+		if len(filter) > 0 {
+			filter += " AND "
+		}
+		filter = fmt.Sprintf("resourceUrl=\"%s\"", opt.ArtifactURI)
+	}
+
 	return GetAAVulnerabilities(ctx, parent, filter)
 }
 
