@@ -45,7 +45,7 @@ func GetVulnerabilities(ctx context.Context, options types.Options) ([]Vulnerabi
 		if len(filter) > 0 {
 			filter += " AND "
 		}
-		filter = fmt.Sprintf("resourceUrl=\"%s\"", opt.ArtifactURI)
+		filter += fmt.Sprintf("resourceUrl=\"%s\"", opt.ArtifactURI)
 	}
 
 	return GetAAVulnerabilities(ctx, parent, filter)

@@ -108,7 +108,32 @@ paths:
               schema:
                 type: array
                 items:
-                  "$ref": "#/components/schemas/Runtime"                  
+                  "$ref": "#/components/schemas/Runtime"
+  /runtime-artifacts:
+    get:
+      tags:
+      - Runtimes
+      summary: Get a list of runtimes
+      description: Returns a a list of runtimes
+      operationId: getRuntimes
+      parameters:
+      - name: artufacts
+        in: query
+        description: match artifacts
+        required: false
+        schema:
+          type: string
+          format: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: string     
   /vulnerabilities:
     get:
       tags:
@@ -124,13 +149,13 @@ paths:
         schema:
           type: string
           format: string
-      - name: max_length
+      - name: artifact
         in: query
-        description: maximum length of returned fact
+        description: filter by artifact
         required: false
         schema:
-          type: integer
-          format: int64
+          type: string
+          format: string
       responses:
         '200':
           description: successful operation
