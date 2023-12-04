@@ -85,22 +85,30 @@
 			]
 		 },
 		 {
-			"query":"list a shape that is red",
+			"query":"list the colors for all shapes",
 			"multi_steps":[
 			   {
-				  "thought":"I should call cat-facts to list a shape",
+				  "thought":"I should call cat-facts to list shapes",
 				  "extension_execution":{
 					 "operation_id":"double",
-					 "extension_instruction":"list a shape",
-					 "observation":"The shape is sphere"
+					 "extension_instruction":"list shapes",
+					 "observation":"The shapes are sphere and cube"
 				  }
 			   },
 			   {
-				"thought":"I should call cat-facts to list red colors for shape sphere",
+				"thought":"I should call cat-facts to list colors for shape sphere",
 				"extension_execution":{
 				   "operation_id":"color",
-				   "extension_instruction":"List red colors for shape sphere",
-				   "observation":"true"
+				   "extension_instruction":"List colors for shape sphere",
+				   "observation":"[\"red\"]"
+				}
+			   },
+			   {
+				"thought":"I should call cat-facts to list colors for shape cube",
+				"extension_execution":{
+				   "operation_id":"color",
+				   "extension_instruction":"List colors for shape cube",
+				   "observation":"[\"blue\"]"
 				}
 			   },
 			   {
@@ -143,18 +151,17 @@
 			]
 		 },
 		 {
-			"extension_instruction":"list a shape",
+			"extension_instruction":"list shapes",
 			"operation_id":"double",
 			"thought":"Issue a double operation request on cat-facts"
 		  },
 		  {
-			"extension_instruction":"List red colors for shape sphere",
+			"extension_instruction":"List colors for shape sphere",
 			"operation_id":"color",
 			"thought":"Issue a color operation request on cat-facts",
-			"operation_param":"{\"shape\": \"sphere\", \"color\": \"red\"}",
+			"operation_param":"{\"shape\": \"sphere\"}",
 			"parameters_mentioned":[
-			   "shape",
-			   "color"
+			   "shape"
 			]
 		  }
 	   ],

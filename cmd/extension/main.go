@@ -181,8 +181,7 @@ func vulArtifactsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func doubleHandler(w http.ResponseWriter, r *http.Request) {
-	//x := []string{"sphere", "cube"}
-	x := "sphere"
+	x := []string{"sphere", "cube"}
 	b, _ := json.Marshal(x)
 	fmt.Fprintf(w, string(b))
 	/*
@@ -201,9 +200,9 @@ func doubleHandler(w http.ResponseWriter, r *http.Request) {
 func colorHandler(w http.ResponseWriter, r *http.Request) {
 	shape := r.URL.Query().Get("shape")
 
-	var yes bool
-	if shape == "red" {
-		yes = true
+	yes := []string{"blue"}
+	if shape == "sphere" {
+		yes = []string{"red"}
 	}
 	b, _ := json.Marshal(yes)
 	fmt.Fprintf(w, string(b))
