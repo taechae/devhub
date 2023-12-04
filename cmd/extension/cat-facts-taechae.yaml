@@ -182,28 +182,6 @@ paths:
                 items:
                   type: string
                   format: string
-  /color:
-    get:
-      tags:
-      - Color
-      summary: Color word
-      description: Returns the word in red
-      operationId: color
-      parameters:
-      - name: word
-        in: query
-        description: word to modify
-        required: false
-        schema:
-          type: string
-          format: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: boolean
   /double:
     get:
       tags:
@@ -211,14 +189,6 @@ paths:
       summary: Double word
       description: Returns the word in duplicate
       operationId: double
-      parameters:
-      - name: word
-        in: query
-        description: word to modify
-        required: false
-        schema:
-          type: string
-          format: string
       responses:
         '200':
           description: successful operation
@@ -228,7 +198,36 @@ paths:
                 type: array
                 items:
                   type: string
-                  format: string           
+                  format: string
+  /color:
+    get:
+      tags:
+      - Color
+      summary: Color word
+      description: Returns the word in red
+      operationId: color
+      parameters:
+      - name: shape
+        in: query
+        description: shape
+        required: false
+        schema:
+          type: string
+          format: string
+      - name: color
+        in: query
+        description: color
+        required: false
+        schema:
+          type: string
+          format: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: boolean           
 components:
   schemas:
     Breed:

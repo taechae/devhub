@@ -198,10 +198,10 @@ func doubleHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func colorHandler(w http.ResponseWriter, r *http.Request) {
-	word := r.URL.Query().Get("word")
+	shape := r.URL.Query().Get("shape")
 
 	var yes bool
-	if word == "red" {
+	if shape == "red" {
 		yes = true
 	}
 	b, _ := json.Marshal(yes)

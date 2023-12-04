@@ -88,7 +88,7 @@
 			"query":"does my basket contain color red?",
 			"multi_steps":[
 			   {
-				  "thought":"I should call cat-facts to get the shapes of my basket",
+				  "thought":"I should call cat-facts to get the shapes in my basket",
 				  "extension_execution":{
 					 "operation_id":"double",
 					 "extension_instruction":"get the shapes in my basket",
@@ -153,15 +153,16 @@
 		 {
 			"extension_instruction":"get the shapes of in basket",
 			"operation_id":"double",
-			"thought":"I should call cat-facts to find out shapes are in my basket"
+			"thought":"Issue a double operation request on cat-facts"
 		  },
 		  {
 			"extension_instruction":"Is shape cube shape a red color?",
 			"operation_id":"color",
-			"thought":"I should call cat-facts to find out if shape cube is color red",
-			"operation_param":"{\"word\": \"cube\"}",
+			"thought":"Issue a color operation request on cat-facts",
+			"operation_param":"{\"shape\": \"cube\", \"color\": \"red\"}",
 			"parameters_mentioned":[
-			   "word"
+			   "shape",
+			   "color"
 			]
 		  }
 	   ],
