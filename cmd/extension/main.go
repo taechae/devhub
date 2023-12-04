@@ -181,7 +181,8 @@ func vulArtifactsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func doubleHandler(w http.ResponseWriter, r *http.Request) {
-	x := []string{"sphere", "cube"}
+	//x := []string{"sphere", "cube"}
+	x := "sphere"
 	b, _ := json.Marshal(x)
 	fmt.Fprintf(w, string(b))
 	/*

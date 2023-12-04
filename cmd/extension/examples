@@ -85,30 +85,22 @@
 			]
 		 },
 		 {
-			"query":"does my basket contain color red?",
+			"query":"list a shape that is red",
 			"multi_steps":[
 			   {
-				  "thought":"I should call cat-facts to get the shapes in my basket",
+				  "thought":"I should call cat-facts to list a shape",
 				  "extension_execution":{
 					 "operation_id":"double",
-					 "extension_instruction":"get the shapes in my basket",
-					 "observation":"The shapes are sphere, cube"
+					 "extension_instruction":"list a shape",
+					 "observation":"The shape is sphere"
 				  }
 			   },
 			   {
-				"thought":"I should call cat-facts to find out if shape sphere is color red",
+				"thought":"I should call cat-facts to list red colors for shape sphere",
 				"extension_execution":{
 				   "operation_id":"color",
-				   "extension_instruction":"Is a sphere shape a red color?",
+				   "extension_instruction":"List red colors for shape sphere",
 				   "observation":"true"
-				}
-			   },
-			   {
-				"thought":"I should call cat-facts to find out if shape cube is color red",
-				"extension_execution":{
-				   "operation_id":"color",
-				   "extension_instruction":"Is a cube shape a red color?",
-				   "observation":"false"
 				}
 			   },
 			   {
@@ -151,15 +143,15 @@
 			]
 		 },
 		 {
-			"extension_instruction":"get the shapes of in basket",
+			"extension_instruction":"list a shape",
 			"operation_id":"double",
 			"thought":"Issue a double operation request on cat-facts"
 		  },
 		  {
-			"extension_instruction":"Is shape cube shape a red color?",
+			"extension_instruction":"List red colors for shape sphere",
 			"operation_id":"color",
 			"thought":"Issue a color operation request on cat-facts",
-			"operation_param":"{\"shape\": \"cube\", \"color\": \"red\"}",
+			"operation_param":"{\"shape\": \"sphere\", \"color\": \"red\"}",
 			"parameters_mentioned":[
 			   "shape",
 			   "color"
