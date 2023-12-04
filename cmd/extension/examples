@@ -65,7 +65,7 @@
 				  "extension_execution":{
 					 "operation_id":"getVulnerabilities",
 					 "extension_instruction":"check if artifact https://us-central1-docker.pkg.dev/s3c100/extension/extension@sha256:0db335cb2c926a8d14dd76c60c02fcf1ce05e0dd425fed898144df3ce7a527ec contains vulnerability CVE-2023-39323",
-					 "observation":"Artifact https://us-central1-docker.pkg.dev/s3c100/extension/extension@sha256:0db335cb2c926a8d14dd76c60c02fcf1ce05e0dd425fed898144df3ce7a527ec contains vulnerability CVE-2023-39323"
+					 "observation":"true"
 				  }
 			   },
 			   {
@@ -73,7 +73,7 @@
 				"extension_execution":{
 				   "operation_id":"getVulnerabilities",
 				   "extension_instruction":"check if artifact https://us-central1-docker.pkg.dev/s3c100/extension/extension@sha256:c90236fd9e3aa168739645a9dd233f1542b50ee989304fe114996b79537d0da2 contains vulnerability CVE-2023-39323",
-				   "observation":"Artifact https://us-central1-docker.pkg.dev/s3c100/extension/extension@sha256:c90236fd9e3aa168739645a9dd233f1542b50ee989304fe114996b79537d0da2 contains vulnerability CVE-2023-39323"
+				   "observation":"true"
 				}
 			 },
 			   {
@@ -85,26 +85,34 @@
 			]
 		 },
 		 {
-			"query":"what color is the word Ball",
+			"query":"do my shapes contain color red",
 			"multi_steps":[
 			   {
-				  "thought":"I should call cat-facts to get the shape of the word Ball",
+				  "thought":"I should call cat-facts to get the shapes of my basket",
 				  "extension_execution":{
 					 "operation_id":"double",
-					 "extension_instruction":"what shape is the word Ball?",
-					 "observation":"Ball is a sphere shape"
+					 "extension_instruction":"get the shapes of my basket",
+					 "observation":"The shapes are sphere, cube"
 				  }
 			   },
 			   {
 				"thought":"I should call cat-facts to find out what color a sphere shape is",
 				"extension_execution":{
 				   "operation_id":"color",
-				   "extension_instruction":"what color is a sphere shape?",
-				   "observation":"sphere is the color red"
+				   "extension_instruction":"Is a sphere shape a red color?",
+				   "observation":"true"
 				}
 			   },
 			   {
-				  "thought":"Since the observation was successful, I should the return result color red.",
+				"thought":"I should call cat-facts to find out what color a cube shape is",
+				"extension_execution":{
+				   "operation_id":"color",
+				   "extension_instruction":"Is a cube shape a red color?",
+				   "observation":"false"
+				}
+			   },
+			   {
+				  "thought":"Since the observation was successful, I should concatenate the results from the previous steps and return he results.",
 				  "respond_to_user":{
 					 
 				  }
@@ -143,19 +151,15 @@
 			]
 		 },
 		 {
-			"extension_instruction":"what color is a sphere shape?",
-			"operation_id":"color",
-			"thought":"I should call cat-facts to find out what color a sphere shape is",
-			"operation_param":"{\"word\": \"sphere\"}",
-			"parameters_mentioned":[
-			   "word"
-			]
+			"extension_instruction":"get the shapes of my basket",
+			"operation_id":"double",
+			"thought":"I should call cat-facts to find out shapes are in my basket"
 		  },
 		  {
-			"extension_instruction":"what shape is the word Ball?",
-			"operation_id":"double",
-			"thought":"I should call cat-facts to find out what shape the word Ball is",
-			"operation_param":"{\"word\": \"Ball\"}",
+			"extension_instruction":"Is a cube shape a red color?",
+			"operation_id":"color",
+			"thought":"I should call cat-facts to find out what color the cube shape is",
+			"operation_param":"{\"word\": \"cube\"}",
 			"parameters_mentioned":[
 			   "word"
 			]

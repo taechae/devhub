@@ -181,23 +181,42 @@ func vulArtifactsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func colorHandler(w http.ResponseWriter, r *http.Request) {
-	word := r.URL.Query().Get("word")
-	word = "Red"
-	b, _ := json.Marshal(struct {
-		StyledWord string `json:"styled_word"`
-	}{
-		StyledWord: word,
-	})
+	x := []string{"sphere", "cube"}
+	b, _ := json.Marshal(x)
 	fmt.Fprintf(w, string(b))
+	/*
+		word := r.URL.Query().Get("word")
+
+		word = "Red"
+		b, _ := json.Marshal(struct {
+			StyledWord string `json:"styled_word"`
+		}{
+			StyledWord: word,
+		})
+		fmt.Fprintf(w, string(b))
+	*/
 }
 
 func doubleHandler(w http.ResponseWriter, r *http.Request) {
 	word := r.URL.Query().Get("word")
-	word = "sphere"
-	b, _ := json.Marshal(struct {
-		StyledWord string `json:"styled_word"`
-	}{
-		StyledWord: word,
-	})
+
+	var yes bool
+	if word == "red" {
+		yes = true
+	}
+	b, _ := json.Marshal(yes)
 	fmt.Fprintf(w, string(b))
+
+	/*
+	   word = "sphere"
+
+	   	b, _ := json.Marshal(struct {
+	   		StyledWord string `json:"styled_word"`
+	   	}{
+
+	   		StyledWord: word,
+	   	})
+
+	   fmt.Fprintf(w, string(b))
+	*/
 }

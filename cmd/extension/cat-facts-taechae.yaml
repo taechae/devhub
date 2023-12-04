@@ -154,9 +154,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/Vulnerability"
+                type: boolean
   /vulnerable-artifacts:
     get:
       tags:
@@ -195,7 +193,7 @@ paths:
       - name: word
         in: query
         description: word to modify
-        required: true
+        required: false
         schema:
           type: string
           format: string
@@ -218,7 +216,7 @@ paths:
       - name: word
         in: query
         description: word to modify
-        required: true
+        required: false
         schema:
           type: string
           format: string
