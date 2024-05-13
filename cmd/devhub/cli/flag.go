@@ -37,6 +37,16 @@ var (
 		Usage:   "uri of the image from which the report was generated (e.g. us-docker.pkg.dev/project/repo/img@sha256:f6efe...)",
 	}
 
+	packageFlag = &c.StringFlag{
+		Name:  "package",
+		Usage: "uri of the image from which the report was generated (e.g. us-docker.pkg.dev/project/repo/img@sha256:f6efe...)",
+	}
+
+	licenseFlag = &c.StringFlag{
+		Name:  "license",
+		Usage: "uri of the image from which the report was generated (e.g. us-docker.pkg.dev/project/repo/img@sha256:f6efe...)",
+	}
+
 	limitFlag = &c.IntFlag{
 		Name:  "limit",
 		Usage: "uri of the image from which the report was generated (e.g. us-docker.pkg.dev/project/repo/img@sha256:f6efe...)",

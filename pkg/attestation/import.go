@@ -224,3 +224,57 @@ func Import(ctx context.Context, options types.Options) error {
 
 	return nil
 }
+
+func GetPackages(ctx context.Context, options types.Options) ([]Package, error) {
+	var out []Package
+
+	opt, ok := options.(*types.PkgOptions)
+	if !ok || opt == nil {
+		return out, errors.New("valid options required")
+	}
+	if err := options.Validate(); err != nil {
+		return out, errors.Wrap(err, "error validating options")
+	}
+
+	parent := fmt.Sprintf("projects/%s", opt.Project)
+
+	pkgs, _ := GetAAPackages(ctx, parent, "")
+
+	for _, p := range pkgs {
+		if len(opt.Package) > 0 && strings.Contains(p.Package, opt.Package) {
+			out = append(out, p)
+		}
+	}
+
+	return out, nil
+}
+
+func GetBuilds(ctx context.Context, options types.Options) ([]Build, error) {
+	var out []Build
+
+	opt, ok := options.(*types.BuildOptions)
+	if !ok || opt == nil {
+		return out, errors.New("valid options required")
+	}
+	if err := options.Validate(); err != nil {
+		return out, errors.Wrap(err, "error validating options")
+	}
+
+	parent := fmt.Sprintf("projects/%s", opt.Project)
+
+	builds, _ := GetAABuilds(ctx, parent, "")
+	sort.SliceStable(builds, func(i, j int) bool {
+		return builds[i].Date.Compare(builds[j].Date) > 0
+	})
+
+	count := 0
+	for _, b := range builds {
+		count++
+		if opt.Limit > 0 && count > opt.Limit {
+			break
+		}
+		out = append(out, b)
+	}
+
+	return out, nil
+}

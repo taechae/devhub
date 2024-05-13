@@ -32,6 +32,8 @@ func main() {
 	http.HandleFunc("/runtime-artifacts", runArtifactsHandler)
 	http.HandleFunc("/vulnerabilities", topVulHandler)
 	http.HandleFunc("/vulnerable-artifacts", vulArtifactsHandler)
+	http.HandleFunc("/packages", pkgHandler)
+	http.HandleFunc("/builds", buildHandler)
 
 	// Determine port for HTTP service.
 	port := os.Getenv("PORT")
@@ -197,4 +199,48 @@ func vulArtifactsHandler(w http.ResponseWriter, r *http.Request) {
 		})
 		fmt.Fprintf(w, string(b))
 	*/
+}
+
+func pkgHandler(w http.ResponseWriter, r *http.Request) {
+	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
+	p := r.URL.Query().Get("package")
+
+	opt := &types.PkgOptions{
+		Project: "s3c100",
+		Limit:   limit,
+		Package: p,
+	}
+
+	out, err := attestation.GetPackages(r.Context(), opt)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	b, _ := json.Marshal(struct {
+		Data []attestation.Package
+	}{
+		Data: out,
+	})
+	fmt.Fprintf(w, string(b))
+}
+
+func buildHandler(w http.ResponseWriter, r *http.Request) {
+	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
+
+	opt := &types.BuildOptions{
+		Project: "s3c100",
+		Limit:   limit,
+	}
+
+	out, err := attestation.GetBuilds(r.Context(), opt)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	b, _ := json.Marshal(struct {
+		Data []attestation.Build
+	}{
+		Data: out,
+	})
+	fmt.Fprintf(w, string(b))
 }

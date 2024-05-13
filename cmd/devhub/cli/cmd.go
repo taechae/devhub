@@ -47,6 +47,28 @@ var (
 			limitFlag,
 		},
 	}
+
+	pkgCmd = &c.Command{
+		Name:    "packages",
+		Aliases: []string{"pkg"},
+		Usage:   "packages",
+		Action:  pkgCmdAction,
+		Flags: []c.Flag{
+			projectFlag,
+			packageFlag,
+			limitFlag,
+		},
+	}
+
+	buildCmd = &c.Command{
+		Name:   "builds",
+		Usage:  "builds",
+		Action: buildCmdAction,
+		Flags: []c.Flag{
+			projectFlag,
+			limitFlag,
+		},
+	}
 )
 
 func runCmdAction(c *c.Context) error {
@@ -77,6 +99,43 @@ func vulnCmdAction(c *c.Context) error {
 
 	//out, err := attestation.GetVulnerabilities(c.Context, opt)
 	out, err := attestation.GetTopVulnerabilities(c.Context, opt)
+	if err != nil {
+		return errors.Wrap(err, "error executing command")
+	}
+
+	b, _ := json.Marshal(out)
+	fmt.Println(string(b))
+
+	return nil
+}
+
+func pkgCmdAction(c *c.Context) error {
+	opt := &types.PkgOptions{
+		Project: c.String(projectFlag.Name),
+		Package: c.String(packageFlag.Name),
+		Limit:   c.Int(limitFlag.Name),
+		Quiet:   isQuiet(c),
+	}
+
+	out, err := attestation.GetPackages(c.Context, opt)
+	if err != nil {
+		return errors.Wrap(err, "error executing command")
+	}
+
+	b, _ := json.Marshal(out)
+	fmt.Println(string(b))
+
+	return nil
+}
+
+func buildCmdAction(c *c.Context) error {
+	opt := &types.BuildOptions{
+		Project: c.String(projectFlag.Name),
+		Limit:   c.Int(limitFlag.Name),
+		Quiet:   isQuiet(c),
+	}
+
+	out, err := attestation.GetBuilds(c.Context, opt)
 	if err != nil {
 		return errors.Wrap(err, "error executing command")
 	}

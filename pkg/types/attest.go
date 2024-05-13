@@ -61,3 +61,43 @@ func (o *VulnOptions) Validate() error {
 
 	return nil
 }
+
+type PkgOptions struct {
+	// Project is the ID of the project to import the report into.
+	Project string
+
+	Package string
+
+	Limit int
+
+	// Quiet suppresses output
+	Quiet bool
+}
+
+// Validate validates the options.
+func (o *PkgOptions) Validate() error {
+	if o.Project == "" {
+		return ErrMissingProject
+	}
+
+	return nil
+}
+
+type BuildOptions struct {
+	// Project is the ID of the project to import the report into.
+	Project string
+
+	Limit int
+
+	// Quiet suppresses output
+	Quiet bool
+}
+
+// Validate validates the options.
+func (o *BuildOptions) Validate() error {
+	if o.Project == "" {
+		return ErrMissingProject
+	}
+
+	return nil
+}
