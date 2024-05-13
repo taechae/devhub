@@ -134,13 +134,13 @@ func topVulHandler(w http.ResponseWriter, r *http.Request) {
 		Limit:   limit,
 	}
 
-	out, err := attestation.GetVulnerabilities(r.Context(), opt)
+	out, err := attestation.GetTopVulnerabilities(r.Context(), opt)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	b, _ := json.Marshal(struct {
-		Data []attestation.Vulnerability
+		Data []attestation.TopVulnerabilities
 	}{
 		Data: out,
 	})
