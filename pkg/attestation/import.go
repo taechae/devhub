@@ -17,6 +17,7 @@ package attestation
 import (
 	"context"
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -49,6 +50,58 @@ func GetVulnerabilities(ctx context.Context, options types.Options) ([]Vulnerabi
 	}
 
 	return GetAAVulnerabilities(ctx, parent, filter)
+}
+
+func GetTopVulnerabilities(ctx context.Context, options types.Options) ([]TopVulnerabilities, error) {
+	vMap := make(map[string]TopVulnerabilities, 0)
+	var out []TopVulnerabilities
+
+	opt, ok := options.(*types.VulnOptions)
+	if !ok || opt == nil {
+		return out, errors.New("valid options required")
+	}
+	if err := options.Validate(); err != nil {
+		return out, errors.Wrap(err, "error validating options")
+	}
+
+	parent := fmt.Sprintf("projects/%s", opt.Project)
+
+	vulns, _ := GetAAVulnerabilities(ctx, parent, "")
+	for _, v := range vulns {
+		if _, ok := vMap[v.Cve]; !ok {
+			vMap[v.Cve] = TopVulnerabilities{
+				Cve:      v.Cve,
+				Severity: v.Severity,
+				Cvss:     v.Cvss,
+			}
+
+		}
+
+		vEntry := vMap[v.Cve]
+		vEntry.Artifacts = append(vEntry.Artifacts, v.ArtifactURI)
+		vMap[v.Cve] = vEntry
+	}
+
+	keys := make([]string, 0, len(vMap))
+	for _, k := range vMap {
+		keys = append(keys, k.Cve)
+	}
+	sort.SliceStable(keys, func(i, j int) bool {
+		return vMap[keys[i]].Cvss > vMap[keys[j]].Cvss
+	})
+
+	count := 0
+	for _, key := range keys {
+		out = append(out, vMap[key])
+		//fmt.Println(vMap[key])
+
+		count++
+		if opt.Limit > 0 && count >= opt.Limit {
+			break
+		}
+	}
+
+	return out, nil
 }
 
 func GetRunRevisions(ctx context.Context, options types.Options) ([]RunRevision, error) {

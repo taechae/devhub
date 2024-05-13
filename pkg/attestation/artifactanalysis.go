@@ -17,6 +17,13 @@ type Vulnerability struct {
 	ArtifactURI string
 }
 
+type TopVulnerabilities struct {
+	Cve       string
+	Severity  string
+	Cvss      float32
+	Artifacts []string
+}
+
 func GetAAVulnerabilities(ctx context.Context, parent string, filter string) ([]Vulnerability, error) {
 	var out []Vulnerability
 

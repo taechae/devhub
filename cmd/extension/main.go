@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 
 	"github.com/taechae/devhub/pkg/attestation"
@@ -29,11 +30,8 @@ func main() {
 
 	http.HandleFunc("/runtimes", runHandler)
 	http.HandleFunc("/runtime-artifacts", runArtifactsHandler)
-	http.HandleFunc("/vulnerabilities", vulHandler)
+	http.HandleFunc("/vulnerabilities", topVulHandler)
 	http.HandleFunc("/vulnerable-artifacts", vulArtifactsHandler)
-
-	http.HandleFunc("/color", colorHandler)
-	http.HandleFunc("/double", doubleHandler)
 
 	// Determine port for HTTP service.
 	port := os.Getenv("PORT")
@@ -126,6 +124,27 @@ func vulHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, string(b))
 }
 
+func topVulHandler(w http.ResponseWriter, r *http.Request) {
+	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
+
+	opt := &types.VulnOptions{
+		Project: "s3c100",
+		Limit:   limit,
+	}
+
+	out, err := attestation.GetVulnerabilities(r.Context(), opt)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	b, _ := json.Marshal(struct {
+		Data []attestation.Vulnerability
+	}{
+		Data: out,
+	})
+	fmt.Fprintf(w, string(b))
+}
+
 func runArtifactsHandler(w http.ResponseWriter, r *http.Request) {
 	opt := &types.RunOptions{
 		Project:  "s3c100",
@@ -177,46 +196,5 @@ func vulArtifactsHandler(w http.ResponseWriter, r *http.Request) {
 			Data: out,
 		})
 		fmt.Fprintf(w, string(b))
-	*/
-}
-
-func doubleHandler(w http.ResponseWriter, r *http.Request) {
-	x := []string{"sphere", "cube"}
-	b, _ := json.Marshal(x)
-	fmt.Fprintf(w, string(b))
-	/*
-		word := r.URL.Query().Get("word")
-
-		word = "Red"
-		b, _ := json.Marshal(struct {
-			StyledWord string `json:"styled_word"`
-		}{
-			StyledWord: word,
-		})
-		fmt.Fprintf(w, string(b))
-	*/
-}
-
-func colorHandler(w http.ResponseWriter, r *http.Request) {
-	shape := r.URL.Query().Get("shape")
-
-	yes := []string{"blue"}
-	if shape == "sphere" {
-		yes = []string{"red"}
-	}
-	b, _ := json.Marshal(yes)
-	fmt.Fprintf(w, string(b))
-
-	/*
-	   word = "sphere"
-
-	   	b, _ := json.Marshal(struct {
-	   		StyledWord string `json:"styled_word"`
-	   	}{
-
-	   		StyledWord: word,
-	   	})
-
-	   fmt.Fprintf(w, string(b))
 	*/
 }

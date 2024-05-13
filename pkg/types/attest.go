@@ -47,6 +47,8 @@ type VulnOptions struct {
 
 	ArtifactURI string
 
+	Limit int
+
 	// Quiet suppresses output
 	Quiet bool
 }

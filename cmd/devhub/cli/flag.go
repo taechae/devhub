@@ -36,4 +36,9 @@ var (
 		Aliases: []string{"cve"},
 		Usage:   "uri of the image from which the report was generated (e.g. us-docker.pkg.dev/project/repo/img@sha256:f6efe...)",
 	}
+
+	limitFlag = &c.IntFlag{
+		Name:  "limit",
+		Usage: "uri of the image from which the report was generated (e.g. us-docker.pkg.dev/project/repo/img@sha256:f6efe...)",
+	}
 )

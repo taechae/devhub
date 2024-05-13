@@ -44,6 +44,7 @@ var (
 		Flags: []c.Flag{
 			projectFlag,
 			cveFlag,
+			limitFlag,
 		},
 	}
 )
@@ -70,10 +71,12 @@ func vulnCmdAction(c *c.Context) error {
 	opt := &types.VulnOptions{
 		Project: c.String(projectFlag.Name),
 		Cve:     c.String(cveFlag.Name),
+		Limit:   c.Int(limitFlag.Name),
 		Quiet:   isQuiet(c),
 	}
 
-	out, err := attestation.GetVulnerabilities(c.Context, opt)
+	//out, err := attestation.GetVulnerabilities(c.Context, opt)
+	out, err := attestation.GetTopVulnerabilities(c.Context, opt)
 	if err != nil {
 		return errors.Wrap(err, "error executing command")
 	}
