@@ -1,0 +1,43 @@
+{
+	"displayName":"artifact analysis",
+	"description":"Artifact Analysis Cloud Assist Extension",
+	"manifest":{
+	   "name":"artifact-analysis",
+	   "description":"Artifact Analysis Cloud Assist Extension",
+	   "apiSpec":{
+		  "openApiGcsUri":"gs://taechae-duet-ar/adaptor.yaml"
+	   },
+	   "authConfig":{
+		  "authType":"NO_AUTH"
+	   }
+	},
+	"toolUseExamples": [
+	{
+		"extensionOperation": {
+			"operationId": "getRandomFact"
+		},
+		"displayName": "Simple example for random facts",
+		"query": "I want to learn some random facts of cats",
+		"requestParams": {
+			"fields": [
+			{
+				"key": "max_length",
+				"value": {
+				"number_value": 100
+				}
+			}
+			]
+		},
+		"responseParams": {
+			"fields": [
+			{
+				"key": "fact",
+				"value": {
+				"string_value": "A cat can be as big as an elephant."
+				}
+			}
+			]
+		},
+		"responseSummary": "A cat can be as big as an elephant."
+	}]
+}

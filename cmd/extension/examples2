@@ -1,0 +1,43 @@
+{
+	"displayName":"cat-facts-taechae",
+	"description":"an awesome extension to solve everything",
+	"manifest":{
+	   "name":"cat-facts",
+	   "description":"A Cat Facts tool to find breed and random facts of cats",
+	   "apiSpec":{
+		  "openApiGcsUri":"gs://model-extend-test-bucket/cat-facts-taechae.yaml"
+	   },
+	   "authConfig":{
+		  "authType":"NO_AUTH"
+	   }
+	},
+	"toolUseExamples": [
+	{
+		"extensionOperation": {
+			"operationId": "getRandomFact"
+		},
+		"displayName": "Simple example for random facts",
+		"query": "I want to learn some random facts of cats",
+		"requestParams": {
+			"fields": [
+			{
+				"key": "max_length",
+				"value": {
+				"number_value": 100
+				}
+			}
+			]
+		},
+		"responseParams": {
+			"fields": [
+			{
+				"key": "fact",
+				"value": {
+				"string_value": "A cat can be as big as an elephant."
+				}
+			}
+			]
+		},
+		"responseSummary": "A cat can be as big as an elephant."
+	}]
+}

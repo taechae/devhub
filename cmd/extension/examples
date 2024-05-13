@@ -85,13 +85,13 @@
 			]
 		 },
 		 {
-			"query":"list the colors for all shapes",
+			"query":"list all in object basket",
 			"multi_steps":[
 			   {
-				  "thought":"I should call cat-facts to list shapes",
+				  "thought":"I should call cat-facts to list shapes in object basket",
 				  "extension_execution":{
 					 "operation_id":"double",
-					 "extension_instruction":"list shapes",
+					 "extension_instruction":"list shapes in object basket",
 					 "observation":"The shapes are sphere and cube"
 				  }
 			   },
@@ -112,10 +112,8 @@
 				}
 			   },
 			   {
-				  "thought":"Since the observation was successful, I should concatenate the results from the previous steps and return he results.",
-				  "respond_to_user":{
-					 
-				  }
+				  "thought":"Since the observation was successful, I should concatenate the results from the previous steps and return [\"red\", \"blue\"]",
+				  "respond_to_user":{}
 			   }
 			]
 		 }
@@ -138,7 +136,7 @@
 		  {
 			"extension_instruction":"get the artifacts of my current runtimes",
 			"operation_id":"getRuntimeArtifacts",
-			"thought":"Issue a getRuntimeArtifacts operation request on cat-facts",
+			"thought":"Issue a getRuntimeArtifacts operation request on cat-facts"
 		  },
 		  {
 			"extension_instruction":"check if artifact https://us-central1-docker.pkg.dev/s3c100/extension/extension@sha256:0db335cb2c926a8d14dd76c60c02fcf1ce05e0dd425fed898144df3ce7a527ec contains vulnerability CVE-2023-39323",
@@ -151,9 +149,13 @@
 			]
 		 },
 		 {
-			"extension_instruction":"list shapes",
+			"extension_instruction":"list shapes in object basket",
 			"operation_id":"double",
-			"thought":"Issue a double operation request on cat-facts"
+			"thought":"Issue a double operation request on cat-facts",
+			"operation_param":"{\"object\": \"basket\"}",
+			"parameters_mentioned":[
+			   "object"
+			]
 		  },
 		  {
 			"extension_instruction":"List colors for shape sphere",

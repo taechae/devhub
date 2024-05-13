@@ -29,7 +29,7 @@ func main() {
 
 	http.HandleFunc("/runtimes", runHandler)
 	http.HandleFunc("/runtime-artifacts", runArtifactsHandler)
-	http.HandleFunc("/vulnerabilities", vulArtifactsHandler)
+	http.HandleFunc("/vulnerabilities", vulHandler)
 	http.HandleFunc("/vulnerable-artifacts", vulArtifactsHandler)
 
 	http.HandleFunc("/color", colorHandler)
