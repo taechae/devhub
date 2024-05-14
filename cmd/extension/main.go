@@ -110,6 +110,25 @@ func runHandler(w http.ResponseWriter, r *http.Request) {
 func vulHandler(w http.ResponseWriter, r *http.Request) {
 	cve := r.URL.Query().Get("vulnerability")
 
+	opt := &types.VulnOptions{
+		Project: "s3c100",
+		Cve:     cve,
+	}
+
+	out, err := attestation.GetVulnerabilities(r.Context(), opt)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	b, _ := json.Marshal(struct {
+		Data []attestation.Vulnerability
+	}{
+		Data: out,
+	})
+	fmt.Fprintf(w, string(b))
+}
+
+func topVulHandler(w http.ResponseWriter, r *http.Request) {
 	// ***
 	var bodyBytes []byte
 	var err error
@@ -138,25 +157,6 @@ func vulHandler(w http.ResponseWriter, r *http.Request) {
 
 	return
 
-	opt := &types.VulnOptions{
-		Project: "s3c100",
-		Cve:     cve,
-	}
-
-	out, err := attestation.GetVulnerabilities(r.Context(), opt)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	b, _ := json.Marshal(struct {
-		Data []attestation.Vulnerability
-	}{
-		Data: out,
-	})
-	fmt.Fprintf(w, string(b))
-}
-
-func topVulHandler(w http.ResponseWriter, r *http.Request) {
 	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
 
 	opt := &types.VulnOptions{
