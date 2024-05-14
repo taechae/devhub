@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  title: Cat Facts API
+  title: Artifact Analysis API
   version: '1.0'
-  description: Cat Facts tool to learn about cats.
+  description: Artifact Analysis API.
 servers:
   - url: https://devhub-ijf3pf6xya-uc.a.run.app
 paths:
@@ -130,31 +130,29 @@ paths:
     get:
       tags:
       - Vulnerabilities
-      summary: Get a list of vulnerabilities
-      description: Returns a a list of vulnerabilities
+      summary: Get a list of top vulnerabilities by severity
+      description: Returns a list of top vulnerabilities by severity
       operationId: getVulnerabilities
       parameters:
-      - name: vulnerability
+      - name: limit
         in: query
-        description: filter by vulnerability
+        description: Used to limit the number of responses
         required: false
         schema:
-          type: string
-          format: string
-      - name: artifact
-        in: query
-        description: filter by artifact
-        required: false
-        schema:
-          type: string
-          format: string
+          type: integer
+          format: int64
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                type: boolean
+                title: Artifacts
+                description: Artifacts
+                type: array
+                items:
+                  type: string
+                  format: string
   /vulnerable-artifacts:
     get:
       tags:

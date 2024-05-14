@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -107,6 +109,34 @@ func runHandler(w http.ResponseWriter, r *http.Request) {
 
 func vulHandler(w http.ResponseWriter, r *http.Request) {
 	cve := r.URL.Query().Get("vulnerability")
+
+	// ***
+	var bodyBytes []byte
+	var err error
+	if r.Body != nil {
+		bodyBytes, err = ioutil.ReadAll(r.Body)
+		if err != nil {
+			fmt.Fprintf(w, "Body reading error: %v", err)
+			return
+		}
+		defer r.Body.Close()
+	}
+
+	fmt.Printf("Headers: %+v\n", r.Header)
+
+	if len(bodyBytes) > 0 {
+		var prettyJSON bytes.Buffer
+		if err = json.Indent(&prettyJSON, bodyBytes, "", "\t"); err != nil {
+			fmt.Fprintf(w, "JSON parse error: %v", err)
+			return
+		}
+		fmt.Fprintf(w, "%s", string(prettyJSON.Bytes()))
+	} else {
+		fmt.Fprintf(w, "Body: No Body Supplied\n")
+	}
+	// ***
+
+	return
 
 	opt := &types.VulnOptions{
 		Project: "s3c100",

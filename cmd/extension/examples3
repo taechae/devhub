@@ -35,9 +35,44 @@
 				"value": {
 				"string_value": "A cat can be as big as an elephant."
 				}
+			},
+			{
+			  "key": "length",
+			  "value": {
+				"number_value": 10
+			  }
 			}
 			]
 		},
 		"responseSummary": "A cat can be as big as an elephant."
-	}]
+	},
+	{
+		"extensionOperation": {
+			"operationId": "getVulnerabilities"
+		},
+		"displayName": "Top vulnerabilities",
+		"query": "List top 5 vulnerabilities by severity",
+		"requestParams": {
+			"fields": [
+			{
+				"key": "limit",
+				"value": {
+					"number_value": 5
+				}
+			}
+			]
+		},
+		"responseParams": {
+			"fields": [
+			{
+				"key": "Data",
+				"value": {
+				"string_value": "[{\"Cve\":\"CVE-2005-2541\",\"Severity\":\"LOW\",\"Cvss\":10,\"Artifacts\":[\"https://us-east1-docker.pkg.dev/s3c100/s3caa/s3caa@sha256:2529e9e57c589d68521d95523877891b41d326a8e5266456bf50d68b172e1cf8\",\"https://us-east1-docker.pkg.dev/s3c100/s3caa/s3caa@sha256:d142fdb9b8d8e9ed81601bc65c5df18259ed6d4cec6fa419a53477132d810619\"]}]"
+				}
+			}
+			]
+		},
+		"responseSummary": "[{\"Cve\":\"CVE-2005-2541\",\"Severity\":\"LOW\",\"Cvss\":10,\"Artifacts\":[\"https://us-east1-docker.pkg.dev/s3c100/s3caa/s3caa@sha256:2529e9e57c589d68521d95523877891b41d326a8e5266456bf50d68b172e1cf8\",\"https://us-east1-docker.pkg.dev/s3c100/s3caa/s3caa@sha256:d142fdb9b8d8e9ed81601bc65c5df18259ed6d4cec6fa419a53477132d810619\"]}]"
+	}
+	]
 }
