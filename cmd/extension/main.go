@@ -64,6 +64,34 @@ func breedHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func factHandler(w http.ResponseWriter, r *http.Request) {
+	// ***
+	var bodyBytes []byte
+	var err error
+	if r.Body != nil {
+		bodyBytes, err = ioutil.ReadAll(r.Body)
+		if err != nil {
+			fmt.Fprintf(w, "Body reading error: %v", err)
+			return
+		}
+		defer r.Body.Close()
+	}
+
+	fmt.Fprintf(w, "Headers: %+v\n", r.Header)
+
+	if len(bodyBytes) > 0 {
+		var prettyJSON bytes.Buffer
+		if err = json.Indent(&prettyJSON, bodyBytes, "", "\t"); err != nil {
+			fmt.Fprintf(w, "JSON parse error: %v", err)
+			return
+		}
+		fmt.Fprintf(w, "%s", string(prettyJSON.Bytes()))
+	} else {
+		fmt.Fprintf(w, "Body: No Body Supplied\n")
+	}
+
+	fmt.Fprintf(w, "Query: %+s\n", r.URL.RawQuery)
+	// ***
+
 	fmt.Fprintf(w, fact)
 }
 
