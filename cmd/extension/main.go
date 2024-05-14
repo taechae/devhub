@@ -141,7 +141,7 @@ func topVulHandler(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 	}
 
-	fmt.Printf("Headers: %+v\n", r.Header)
+	fmt.Fprintf(w, "Headers: %+v\n", r.Header)
 
 	if len(bodyBytes) > 0 {
 		var prettyJSON bytes.Buffer
@@ -153,6 +153,8 @@ func topVulHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Fprintf(w, "Body: No Body Supplied\n")
 	}
+
+	fmt.Fprintf(w, "Query: %+s\n", r.URL.RawQuery)
 	// ***
 
 	return
